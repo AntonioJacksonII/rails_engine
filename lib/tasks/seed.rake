@@ -9,11 +9,10 @@ task seed: :environment do
                       created_at: row[:created_at],
                       updated_at: row[:updated_at])
   end
-  # CSV.foreach('./db/data/invoice_items.csv', headers: true, header_converters: :symbol) do |row|
-  #   InvoiceItem.create!(item_id: row[:item_id],
-  #                       invoice_id: row[:invoice_id],
-  #                       unit_price: row[:quantity] / 100,
-  #                       created_at: row[:created_at],
-  #                       updated_at: row[:updated_at])
-  # end
+  CSV.foreach('./db/data/merchants.csv', headers: true, header_converters: :symbol) do |row|
+    Merchant.create!( name: row[:name],
+                      created_at: row[:created_at],
+                      updated_at: row[:updated_at])
+  end
+  require "pry"; binding.pry
 end
