@@ -78,4 +78,22 @@ describe 'Merchants API' do
       expect(items[:data].first[:id]).to eq(last_item.id.to_s)
     end
   end
+
+  describe :finders do
+    it 'returns a single merchant that matches input criteria' do
+      create(:merchant, name: 'Turing')
+      create(:merchant, name: 'Fake')
+      create(:merchant, name: 'Ring World')
+
+      get '/api/vi/merchants/find?name=ring'
+
+      expect(response).to be_successful
+      merchant = JSON.parse(response.body, symbolize_names: true)
+      name = merchant[:data][:attributes][:name].downcase
+
+      expect(merchant[:data]).to be_a(Hash)
+      expect(merchant[:data].count).to eq(1)
+      expect(name).to include('ring')
+    end
+  end
 end
