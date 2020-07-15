@@ -17,4 +17,8 @@ describe Customer, type: :model do
     expect(customer.created_at).to eq('2012-03-27 14:54:09 UTC')
     expect(customer.updated_at).to eq('2012-03-27 14:54:09 UTC')
   end
+
+  describe 'relationships' do
+    it {should have_many :invoices}
+  end
 end
