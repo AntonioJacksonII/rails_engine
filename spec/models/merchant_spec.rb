@@ -15,4 +15,8 @@ describe Merchant, type: :model do
     expect(merchant.created_at).to eq('2012-03-27 14:53:59 UTC')
     expect(merchant.updated_at).to eq('2012-03-27 14:53:59 UTC')
   end
+
+  describe 'relationships' do
+    it {should have_many :items}
+  end
 end
