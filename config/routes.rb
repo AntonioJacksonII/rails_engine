@@ -9,8 +9,10 @@ Rails.application.routes.draw do
       get '/merchants/:id/revenue', to: 'business_intelligence#index'
 
       resources :merchants do
-        resources :items, only: [:index]
+        get '/items', to: 'merchant_items#index'
       end
+
+      resources :items
     end
   end
 end

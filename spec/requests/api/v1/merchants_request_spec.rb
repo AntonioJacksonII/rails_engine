@@ -9,6 +9,8 @@ describe 'Merchants API' do
 
     merchants = JSON.parse(response.body, symbolize_names: true)
     expect(merchants[:data].count).to eq(3)
+    expect(merchants[:data]).to_not be_empty
+
   end
 
   it 'can get one merchant by its id' do
