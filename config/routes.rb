@@ -12,7 +12,10 @@ Rails.application.routes.draw do
         get '/items', to: 'merchant_items#index'
       end
 
-      resources :items
+      resources :items do
+        get '/merchant', to:'item_merchants#show'
+      end
+
     end
   end
 end

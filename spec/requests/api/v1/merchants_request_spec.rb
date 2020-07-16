@@ -48,7 +48,7 @@ describe 'Merchants API' do
 
     expect(response).to be_successful
     expect(Merchant.count).to eq(0)
-    expect{Item.find(id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect{Merchant.find(id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   describe :relationships do
