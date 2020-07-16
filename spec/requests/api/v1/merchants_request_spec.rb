@@ -111,4 +111,36 @@ describe 'Merchants API' do
       names.each{ |name| expect(name).to include('ring')}
     end
   end
+
+  describe :business_intelligence do
+    it 'returns a variable list of merchants ranked by total revenue' do
+      create_list(:merchant, 20)
+      merchant1 = Merchant.create!(name: 'First Place')
+      merchant2 = Merchant.create!(name: 'Second Place')
+      merchant3 = Merchant.create!(name: 'Third Place')
+      customer1 = Customer.create!(first_name: 'Customer', last_name: 'A')
+      customer2 = Customer.create!(first_name: 'Customer', last_name: 'B')
+      customer3 = Customer.create!(first_name: 'Customer', last_name: 'C')
+      item1 = create(:item, merchant: merchant1, unit_price: 100)
+      item2 = create(:item, merchant: merchant2, unit_price: 10)
+      item3 = create(:item, merchant: merchant3, unit_price: 1)
+      invoice1 = merchant1.invoices.create!(customer: customer1, status: 'shipped')
+      invoice2 = merchant2.invoices.create!(customer: customer2, status: 'shipped')
+      invoice3 = merchant3.invoices.create!(customer: customer3, status: 'shipped')
+      invoice1.invoice_items.create!(item: item1, quantity: 1, unit_price: 100)
+      invoice2.invoice_items.create!(item: item2, quantity: 2, unit_price: 10)
+      invoice3.invoice_items.create!(item: item3, quantity: 3, unit_price: 1)
+      invoice1.transactions.create!(result: 'success')
+      invoice2.transactions.create!(result: 'success')
+      invoice3.transactions.create!(result: 'success')
+
+      get '/api/v1/merchants/most_revenue?quantity=2'
+
+      expect(response).to be_successful
+      results = JSON.parse(response.body, symbolize_names: true)
+      expect(results[:data].length).to eq(2)
+      expect(results[:data].first[:attributes][:name]).to eq('First Place')
+      expect(results[:data].last[:attributes][:name]).to eq('Second Place')
+    end
+  end
 end
