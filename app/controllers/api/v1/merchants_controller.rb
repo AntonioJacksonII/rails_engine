@@ -1,6 +1,11 @@
 class Api::V1::MerchantsController < ApplicationController
   def index
-    render json: MerchantSerializer.new(Merchant.all)
+    if merchant_params.keys.count > 0
+      merchants = Merchant.where("name ilike ?", "%#{merchant_params[:name]}%")
+      render json: MerchantSerializer.new(merchants)
+    else
+      render json: MerchantSerializer.new(Merchant.all)
+    end
   end
 
   def show
