@@ -94,5 +94,21 @@ describe 'Merchants API' do
       expect(merchant[:data]).to be_a(Hash)
       expect(name).to include('ring')
     end
+
+    it 'returns all records that match input criteria' do
+      create(:merchant, name: 'Turing')
+      create(:merchant, name: 'Fake')
+      create(:merchant, name: 'Ring World')
+
+      get '/api/v1/merchants/find_all?name=ring'
+
+      expect(response).to be_successful
+      merchants = JSON.parse(response.body, symbolize_names: true)
+      names = merchants[:data].map do |merchant|
+        merchant[:attributes][:name].downcase
+      end
+      expect(names.count).to eq(2)
+      names.each{ |name| expect(name).to include('ring')}
+    end
   end
 end
