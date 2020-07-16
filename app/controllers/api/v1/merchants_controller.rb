@@ -1,21 +1,11 @@
 class Api::V1::MerchantsController < ApplicationController
   def index
-    if merchant_params.keys.count > 0
-      merchants = Merchant.where("name ilike ?", "%#{merchant_params[:name]}%")
-      render json: MerchantSerializer.new(merchants)
-    else
       render json: MerchantSerializer.new(Merchant.all)
-    end
   end
 
   def show
     id = params[:id]
-    if id
-      render json: MerchantSerializer.new(Merchant.find(id))
-    else
-      merchant = Merchant.where("name ilike ?", "%#{merchant_params[:name]}%").first
-      render json: MerchantSerializer.new(merchant)
-    end
+    render json: MerchantSerializer.new(Merchant.find(id))
   end
 
   def create
@@ -36,6 +26,6 @@ class Api::V1::MerchantsController < ApplicationController
   private
 
     def merchant_params
-      params.permit(:name, :created_at, :updated_at, :id)
+      params.permit(:name)
     end
 end
