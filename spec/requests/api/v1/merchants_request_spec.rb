@@ -113,7 +113,7 @@ describe 'Merchants API' do
   end
 
   describe :business_intelligence do
-    it 'returns a variable list of merchants ranked by total revenue' do
+    before :each do
       create_list(:merchant, 20)
       merchant1 = Merchant.create!(name: 'First Place')
       merchant2 = Merchant.create!(name: 'Second Place')
@@ -133,7 +133,8 @@ describe 'Merchants API' do
       invoice1.transactions.create!(result: 'success')
       invoice2.transactions.create!(result: 'success')
       invoice3.transactions.create!(result: 'success')
-
+    end
+    it 'returns a variable list of merchants ranked by total revenue' do
       get '/api/v1/merchants/most_revenue?quantity=2'
 
       expect(response).to be_successful
