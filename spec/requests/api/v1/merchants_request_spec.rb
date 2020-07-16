@@ -118,6 +118,7 @@ describe 'Merchants API' do
       merchant1 = Merchant.create!(name: 'First Place')
       merchant2 = Merchant.create!(name: 'Second Place')
       merchant3 = Merchant.create!(name: 'Third Place')
+      @id = merchant3.id
       customer1 = Customer.create!(first_name: 'Customer', last_name: 'A')
       customer2 = Customer.create!(first_name: 'Customer', last_name: 'B')
       customer3 = Customer.create!(first_name: 'Customer', last_name: 'C')
@@ -155,5 +156,14 @@ describe 'Merchants API' do
       expect(results[:data].last[:attributes][:name]).to eq('First Place')
     end
 
+    it 'returns total revenue for a merchant' do
+      get "/api/v1/merchants/#{@id}/revenue"
+
+      expect(response).to be_successful
+      results = JSON.parse(response.body, symbolize_names: true)
+      expect(results.length).to eq(1)
+      expect(results[:data][:id]).to eq(nil)
+      expect(results[:data][:attributes][:revenue]).to eq(3)
+    end
   end
 end
