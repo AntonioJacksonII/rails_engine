@@ -5,7 +5,12 @@ class Api::V1::MerchantsController < ApplicationController
 
   def show
     id = params[:id]
-    render json: MerchantSerializer.new(Merchant.find(id))
+    if id
+      render json: MerchantSerializer.new(Merchant.find(id))
+    else
+      merchant = Merchant.where("name ilike ?", "%#{merchant_params[:name]}%").first
+      render json: MerchantSerializer.new(merchant)
+    end
   end
 
   def create
@@ -26,6 +31,6 @@ class Api::V1::MerchantsController < ApplicationController
   private
 
     def merchant_params
-      params.permit(:name)
+      params.permit(:name, :created_at, :updated_at, :id)
     end
 end

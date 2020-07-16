@@ -85,14 +85,13 @@ describe 'Merchants API' do
       create(:merchant, name: 'Fake')
       create(:merchant, name: 'Ring World')
 
-      get '/api/vi/merchants/find?name=ring'
+      get '/api/v1/merchants/find?name=ring'
 
       expect(response).to be_successful
       merchant = JSON.parse(response.body, symbolize_names: true)
       name = merchant[:data][:attributes][:name].downcase
 
       expect(merchant[:data]).to be_a(Hash)
-      expect(merchant[:data].count).to eq(1)
       expect(name).to include('ring')
     end
   end
