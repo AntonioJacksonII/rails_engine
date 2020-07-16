@@ -134,6 +134,7 @@ describe 'Merchants API' do
       invoice2.transactions.create!(result: 'success')
       invoice3.transactions.create!(result: 'success')
     end
+
     it 'returns a variable list of merchants ranked by total revenue' do
       get '/api/v1/merchants/most_revenue?quantity=2'
 
@@ -143,5 +144,16 @@ describe 'Merchants API' do
       expect(results[:data].first[:attributes][:name]).to eq('First Place')
       expect(results[:data].last[:attributes][:name]).to eq('Second Place')
     end
+
+    it 'returns a variable list of merchants ranked by total items sold' do
+      get '/api/v1/merchants/most_items?quantity=3'
+
+      expect(response).to be_successful
+      results = JSON.parse(response.body, symbolize_names: true)
+      expect(results[:data].length).to eq(3)
+      expect(results[:data].first[:attributes][:name]).to eq('Third Place')
+      expect(results[:data].last[:attributes][:name]).to eq('First Place')
+    end
+
   end
 end
